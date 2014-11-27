@@ -11,6 +11,7 @@ def normalizaTexto(texto):
     texto = re.sub(r'\[[0-9]+\]','',texto)
     texto = texto.replace('\"','')
     texto = re.sub(r'[ \t\n\r\f\v]+',' ',texto)
+    texto = texto.replace(' ,', ',')
     return texto.strip()
 
 def formatoCSV(triplas):
@@ -23,7 +24,7 @@ def formatoCSV(triplas):
         #se nao tenho objetos naquele predicado, ignoro-o
         if len(objeto) == 0  :
             continue
-        string += '"'+sujeito + '"\t"' + predicado + '"\t"' + objeto + '"\n'
+        string += '"'+sujeito + '";"' + predicado + '";"' + objeto + '"\n'
     return string
 
 def getInfobox(pagina):
@@ -96,10 +97,15 @@ def getPagina(url):
 def getListaPersonagens():
     return urlsLista(removeLixo(getPagina('/index.php/List_of_Characters')))
 
+def getTitle(texto):
+    regexp = re.compile('(?<=\<title\>).+(?=- A Wiki of Ice and Fire\<\/title\>)')
+    titulo = regexp.findall(texto)[0]
+    return normalizaTexto(titulo)
+
 def crawlingPipeline(proximos, visitados):
-    f = open('C:/Users/Gabriel/triplas'+ datetime.now().strftime('%d%m%Y_%H%M%S')+'.csv', 'w')
-    log = open('C:/Users/Gabriel/log' + datetime.now().strftime('%d%m%Y_%H%M%S')+'.txt', 'w')
-    f.write('"Sujeito"\t"Predicado"\t"Objeto"\n')
+    f = open('triplas'+ datetime.now().strftime('%d%m%Y_%H%M%S')+'.csv', 'w')
+    log = open('log' + datetime.now().strftime('%d%m%Y_%H%M%S')+'.txt', 'w')
+    f.write('"Sujeito";"Predicado";"Objeto"\n')
     i = 0
     ultimaVisita = datetime.now()
     tMedio = ultimaVisita-ultimaVisita #nao sei zerar esse tipo de dado
@@ -113,7 +119,7 @@ def crawlingPipeline(proximos, visitados):
             i += 1
             deltaT = datetime.now() - ultimaVisita
             tMedio += 1.0/i*( deltaT - tMedio )
-            andamento = str(i) + "/"+ str(len(proximos) + i ) + "\t" + atual + "\t"+ datetime.now().strftime('%Y-%m-%d %H:%M:%S') + "\t" + str(100.0*i/(len(proximos)+i)) +"%\tEstimado " + str( tMedio*len(proximos) ) + "\n"
+            andamento = "\n" + str(i) + "/"+ str(len(proximos) + i ) + "\t" + atual + "\t"+ datetime.now().strftime('%Y-%m-%d %H:%M:%S') + "\t" + str(100.0*i/(len(proximos)+i)) +"%\tEstimado " + str( tMedio*len(proximos) )
             log.write(andamento)
             print(andamento)
             ultimaVisita = datetime.now()
@@ -127,6 +133,7 @@ def crawlingPipeline(proximos, visitados):
                 continue
             
             triplas = parseiaTriplas(texto=infobox, sujeito=atual)
+            triplas += [ (atual, "name" , getTitle(pagina)) ]
 
             #persistencia
             string = formatoCSV(triplas)
@@ -147,6 +154,6 @@ def crawlingPipeline(proximos, visitados):
 
 proximos = getListaPersonagens()
 #proximos = open('C:/Users/Gabriel/proximos.csv','r').read().split('\n')
-visitados = set()
+visitados = set("/index.php/George_R._R._Martin")
 #visitados = set(open('C:/Users/Gabriel/visitados.csv','r').read().split('\n'))
 crawlingPipeline(proximos, visitados)
