@@ -65,19 +65,19 @@ conversao = {
 	"words":"hasWords"
 }
 
-dataType={"BATTLE":["dateIs","nameIs", "resultWas"],
+dataType={"BATTLE":["dateIs","nameIs", "place", "resultWas"],
 	"BOOK":["authorIs","followedBy","hasGenre","hasISBN","nameIs", "pages","publisherIs","wasReleased"],
 	"CHARACTER":["appearsInSeason","bornIn","diedIn","fullNameIs","hasAlias","hasCulture","hasRace","nameIs","otherTitles","playedBy","reigned","titlesIs"],
-	"CITY":["destroyedIn","hasReligion","isGovernedBy","isNamedFor","nameIs","notablePlaceIs","organizations","wasFounded"],
-	"HOUSE":["diedOut","hasAncestralWeapon","hasCoatOfArms","hasWords","nameIs","wasFounded","titlesIs"],
-	"WAR":["nameIs"]
+	"CITY":["destroyedIn","locationIs","hasReligion","isGovernedBy","isNamedFor","nameIs","notablePlaceIs","organizations","wasFounded"],
+	"HOUSE":["diedOut","fromRegion","hasAncestralWeapon","hasCoatOfArms","hasWords","nameIs","wasFounded","titlesIs"],
+	"WAR":["dateIs","nameIs", "resultWas"]
 }
 
-ObjectProperties = {"BATTLE": [("conflictHappenedIn","WAR"),("place","CITY"),("place","REGION")],
+ObjectProperties = {"BATTLE": [("conflictHappenedIn","WAR")],
 	"BOOK":[("precededBy","BOOK")],
+	"CITY":[],
 	"CHARACTER":[("appearsIn","BOOK"),("belongsToRoyalHouse","HOUSE"),("father","CHARACTER"),("hasAllegianceWith","HOUSE"),("hasIssue","CHARACTER"),("heirIs","CHARACTER"),("motherIs","CHARACTER"),("queenIs","CHARACTER"),("spouse","CHARACTER"),("sucessorIs","CHARACTER")],
-	"CITY":[("locationIs","REGION")],
-	"HOUSE":[("currentLordIs","CHARACTER"),("fromRegion","REGION"),("hasCadetBranch","HOUSE"),("heirIs","CHARACTER"),("overlordIs","HOUSE"),("seatIs","CITY"),("wasFoundedBy","CHARACTER")],
+	"HOUSE":[("currentLordIs","CHARACTER"),("hasCadetBranch","HOUSE"),("heirIs","CHARACTER"),("overlordIs","HOUSE"),("seatIs","CITY"),("wasFoundedBy","CHARACTER")],
 	"WAR":[("hasBattle","BATTLE")]
 }
 
@@ -210,7 +210,7 @@ def pipelinePosProcessamento(arqEntrada='triplas27112014_004031.csv'):
 	triplas = importaTriplas(arqEntrada)
 	triplas = substituicaoBasica(triplas)
 	#triplas = removeTriplasRedundantes(triplas)
-	#triplas = removeLinksExtras(triplas)
+	triplas = removeLinksExtras(triplas)
 	triplas = localizaRelacoes(triplas)
 	inferencia = infereTipo(triplas)
 
