@@ -41,7 +41,7 @@ conversao = {
 	"notable places":"notablePlaceIs",#
 	"organizations":"organizations",
 	"other titles":"otherTitles",
-	"overlord":"isOverlordOf",
+	"overlord":"overlordIs",
 	"pages":"pages",
 	"place":"place",
 	"played by":"playedBy",
@@ -60,16 +60,16 @@ conversao = {
 	"spouse" : "spouse",
 	"spouse(s)" : "spouse",
 	"successor":"sucessorIs",
-	"title":"titlesIs",
+	"title":"titleIs",
 	"tv series":"appearsInSeason",
 	"words":"hasWords"
 }
 
 dataType={"Battle":["dateIs","nameIs", "place", "resultWas"],
 	"Book":["authorIs","followedBy","hasGenre","hasISBN","nameIs", "pages","publisherIs","wasReleased"],
-	"Character":["appearsInSeason","bornIn","diedIn","fullNameIs","hasAlias","hasCulture","hasRace","nameIs","otherTitles","playedBy","reigned","titlesIs"],
+	"Character":["appearsInSeason","bornIn","diedIn","fullNameIs","hasAlias","hasCulture","hasRace","nameIs","otherTitles","playedBy","reigned","titleIs"],
 	"City":["destroyedIn","locationIs","hasReligion","isGovernedBy","isNamedFor","nameIs","notablePlaceIs","organizations","wasFounded"],
-	"House":["diedOut","fromRegion","hasAncestralWeapon","hasCoatOfArms","hasWords","nameIs","wasFounded","titlesIs"],
+	"House":["diedOut","fromRegion","hasAncestralWeapon","hasCoatOfArms","hasWords","nameIs","wasFounded","titleIs"],
 	"War":["dateIs","nameIs", "resultWas"]
 }
 

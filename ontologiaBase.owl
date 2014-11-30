@@ -151,9 +151,9 @@
     
 
 
-    <!-- http://awoiaf.westeros.org/index.php#isOverlordOf -->
+    <!-- http://awoiaf.westeros.org/index.php#overlordIs -->
 
-    <owl:ObjectProperty rdf:about="http://awoiaf.westeros.org/index.php#isOverlordOf">
+    <owl:ObjectProperty rdf:about="http://awoiaf.westeros.org/index.php#overlordIs">
         <rdfs:label>overlordIs</rdfs:label>
         <dc:title>overlordIs</dc:title>
         <rdfs:domain rdf:resource="http://awoiaf.westeros.org/index.php#House"/>
@@ -523,7 +523,14 @@
     <!-- http://awoiaf.westeros.org/index.php#titleIs -->
 
     <owl:DatatypeProperty rdf:about="http://awoiaf.westeros.org/index.php#titleIs">
-        <rdfs:domain rdf:resource="http://awoiaf.westeros.org/index.php#Character"/>
+        <rdfs:domain>
+            <owl:Class>
+                <owl:unionOf rdf:parseType="Collection">
+                    <rdf:Description rdf:about="http://awoiaf.westeros.org/index.php#House"/>
+                    <rdf:Description rdf:about="http://awoiaf.westeros.org/index.php#Character"/>
+                </owl:unionOf>
+            </owl:Class>
+        </rdfs:domain>
     </owl:DatatypeProperty>
     
 
