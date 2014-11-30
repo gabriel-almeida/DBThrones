@@ -1,0 +1,617 @@
+<?xml version="1.0"?>
+
+
+<!DOCTYPE rdf:RDF [
+    <!ENTITY owl "http://www.w3.org/2002/07/owl#" >
+    <!ENTITY dc "http://purl.org/dc/elements/1.1/" >
+    <!ENTITY xsd "http://www.w3.org/2001/XMLSchema#" >
+    <!ENTITY rdfs "http://www.w3.org/2000/01/rdf-schema#" >
+    <!ENTITY rdf "http://www.w3.org/1999/02/22-rdf-syntax-ns#" >
+    <!ENTITY anzoowl "http://openanzo.org/ontologies/2009/05/AnzoOwl#" >
+]>
+
+
+<rdf:RDF xmlns="http://awoiaf.westeros.org/index.php#"
+     xml:base="http://awoiaf.westeros.org/index.php"
+     xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+     xmlns:owl="http://www.w3.org/2002/07/owl#"
+     xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
+     xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+     xmlns:anzoowl="http://openanzo.org/ontologies/2009/05/AnzoOwl#"
+     xmlns:dc="http://purl.org/dc/elements/1.1/">
+    <owl:Ontology rdf:about="http://awoiaf.westeros.org/index.php">
+        <rdfs:label>awoiafOntology</rdfs:label>
+        <dc:title>awoiafOntology</dc:title>
+    </owl:Ontology>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Annotation properties
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://purl.org/dc/elements/1.1/title -->
+
+    <owl:AnnotationProperty rdf:about="&dc;title"/>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Object Properties
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://awoiaf.westeros.org/index.php#appearsIn -->
+
+    <owl:ObjectProperty rdf:about="http://awoiaf.westeros.org/index.php#appearsIn">
+        <rdfs:range rdf:resource="http://awoiaf.westeros.org/index.php#Book"/>
+        <rdfs:domain rdf:resource="http://awoiaf.westeros.org/index.php#Character"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://awoiaf.westeros.org/index.php#belongsToRoyalHouse -->
+
+    <owl:ObjectProperty rdf:about="http://awoiaf.westeros.org/index.php#belongsToRoyalHouse">
+        <rdfs:domain rdf:resource="http://awoiaf.westeros.org/index.php#Character"/>
+        <rdfs:range rdf:resource="http://awoiaf.westeros.org/index.php#House"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://awoiaf.westeros.org/index.php#conflictHappenedIn -->
+
+    <owl:ObjectProperty rdf:about="http://awoiaf.westeros.org/index.php#conflictHappenedIn">
+        <rdfs:domain rdf:resource="http://awoiaf.westeros.org/index.php#Battle"/>
+        <rdfs:range rdf:resource="http://awoiaf.westeros.org/index.php#War"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://awoiaf.westeros.org/index.php#currentLordIs -->
+
+    <owl:ObjectProperty rdf:about="http://awoiaf.westeros.org/index.php#currentLordIs">
+        <rdfs:range rdf:resource="http://awoiaf.westeros.org/index.php#Character"/>
+        <rdfs:domain rdf:resource="http://awoiaf.westeros.org/index.php#House"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://awoiaf.westeros.org/index.php#father -->
+
+    <owl:ObjectProperty rdf:about="http://awoiaf.westeros.org/index.php#father">
+        <rdfs:range rdf:resource="http://awoiaf.westeros.org/index.php#Character"/>
+        <rdfs:domain rdf:resource="http://awoiaf.westeros.org/index.php#Character"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://awoiaf.westeros.org/index.php#hasAllegianceWith -->
+
+    <owl:ObjectProperty rdf:about="http://awoiaf.westeros.org/index.php#hasAllegianceWith">
+        <rdfs:domain rdf:resource="http://awoiaf.westeros.org/index.php#Character"/>
+        <rdfs:range rdf:resource="http://awoiaf.westeros.org/index.php#House"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://awoiaf.westeros.org/index.php#hasBattle -->
+
+    <owl:ObjectProperty rdf:about="http://awoiaf.westeros.org/index.php#hasBattle">
+        <rdfs:range rdf:resource="http://awoiaf.westeros.org/index.php#Battle"/>
+        <rdfs:domain rdf:resource="http://awoiaf.westeros.org/index.php#War"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://awoiaf.westeros.org/index.php#hasCadetBranch -->
+
+    <owl:ObjectProperty rdf:about="http://awoiaf.westeros.org/index.php#hasCadetBranch">
+        <rdfs:range rdf:resource="http://awoiaf.westeros.org/index.php#House"/>
+        <rdfs:domain rdf:resource="http://awoiaf.westeros.org/index.php#House"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://awoiaf.westeros.org/index.php#hasIssue -->
+
+    <owl:ObjectProperty rdf:about="http://awoiaf.westeros.org/index.php#hasIssue">
+        <rdfs:domain rdf:resource="http://awoiaf.westeros.org/index.php#Character"/>
+        <rdfs:range rdf:resource="http://awoiaf.westeros.org/index.php#Character"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://awoiaf.westeros.org/index.php#heirIs -->
+
+    <owl:ObjectProperty rdf:about="http://awoiaf.westeros.org/index.php#heirIs">
+        <rdfs:range rdf:resource="http://awoiaf.westeros.org/index.php#Character"/>
+        <rdfs:domain>
+            <owl:Class>
+                <owl:unionOf rdf:parseType="Collection">
+                    <rdf:Description rdf:about="http://awoiaf.westeros.org/index.php#Character"/>
+                    <rdf:Description rdf:about="http://awoiaf.westeros.org/index.php#House"/>
+                </owl:unionOf>
+            </owl:Class>
+        </rdfs:domain>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://awoiaf.westeros.org/index.php#isOverlordOf -->
+
+    <owl:ObjectProperty rdf:about="http://awoiaf.westeros.org/index.php#isOverlordOf">
+        <rdfs:label>overlordIs</rdfs:label>
+        <dc:title>overlordIs</dc:title>
+        <rdfs:domain rdf:resource="http://awoiaf.westeros.org/index.php#House"/>
+        <rdfs:range rdf:resource="http://awoiaf.westeros.org/index.php#House"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://awoiaf.westeros.org/index.php#motherIs -->
+
+    <owl:ObjectProperty rdf:about="http://awoiaf.westeros.org/index.php#motherIs">
+        <rdfs:range rdf:resource="http://awoiaf.westeros.org/index.php#Character"/>
+        <rdfs:domain rdf:resource="http://awoiaf.westeros.org/index.php#Character"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://awoiaf.westeros.org/index.php#precededBy -->
+
+    <owl:ObjectProperty rdf:about="http://awoiaf.westeros.org/index.php#precededBy">
+        <rdfs:range rdf:resource="http://awoiaf.westeros.org/index.php#Book"/>
+        <rdfs:domain rdf:resource="http://awoiaf.westeros.org/index.php#Book"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://awoiaf.westeros.org/index.php#queenIs -->
+
+    <owl:ObjectProperty rdf:about="http://awoiaf.westeros.org/index.php#queenIs">
+        <rdfs:range rdf:resource="http://awoiaf.westeros.org/index.php#Character"/>
+        <rdfs:domain rdf:resource="http://awoiaf.westeros.org/index.php#Character"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://awoiaf.westeros.org/index.php#seatIs -->
+
+    <owl:ObjectProperty rdf:about="http://awoiaf.westeros.org/index.php#seatIs">
+        <rdfs:range rdf:resource="http://awoiaf.westeros.org/index.php#City"/>
+        <rdfs:domain rdf:resource="http://awoiaf.westeros.org/index.php#House"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://awoiaf.westeros.org/index.php#spouse -->
+
+    <owl:ObjectProperty rdf:about="http://awoiaf.westeros.org/index.php#spouse">
+        <rdfs:domain rdf:resource="http://awoiaf.westeros.org/index.php#Character"/>
+        <rdfs:range rdf:resource="http://awoiaf.westeros.org/index.php#Character"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://awoiaf.westeros.org/index.php#sucessorIs -->
+
+    <owl:ObjectProperty rdf:about="http://awoiaf.westeros.org/index.php#sucessorIs">
+        <rdfs:range rdf:resource="http://awoiaf.westeros.org/index.php#Character"/>
+        <rdfs:domain rdf:resource="http://awoiaf.westeros.org/index.php#Character"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://awoiaf.westeros.org/index.php#wasFoundedBy -->
+
+    <owl:ObjectProperty rdf:about="http://awoiaf.westeros.org/index.php#wasFoundedBy">
+        <rdfs:range rdf:resource="http://awoiaf.westeros.org/index.php#Character"/>
+        <rdfs:domain rdf:resource="http://awoiaf.westeros.org/index.php#House"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Data properties
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://awoiaf.westeros.org/index.php#appearsInSeason -->
+
+    <owl:DatatypeProperty rdf:about="http://awoiaf.westeros.org/index.php#appearsInSeason">
+        <rdfs:domain rdf:resource="http://awoiaf.westeros.org/index.php#Character"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://awoiaf.westeros.org/index.php#authorIs -->
+
+    <owl:DatatypeProperty rdf:about="http://awoiaf.westeros.org/index.php#authorIs">
+        <rdfs:domain rdf:resource="http://awoiaf.westeros.org/index.php#Book"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://awoiaf.westeros.org/index.php#bornIn -->
+
+    <owl:DatatypeProperty rdf:about="http://awoiaf.westeros.org/index.php#bornIn">
+        <rdfs:domain rdf:resource="http://awoiaf.westeros.org/index.php#Character"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://awoiaf.westeros.org/index.php#dateIs -->
+
+    <owl:DatatypeProperty rdf:about="http://awoiaf.westeros.org/index.php#dateIs">
+        <rdfs:domain>
+            <owl:Class>
+                <owl:unionOf rdf:parseType="Collection">
+                    <rdf:Description rdf:about="http://awoiaf.westeros.org/index.php#Battle"/>
+                    <rdf:Description rdf:about="http://awoiaf.westeros.org/index.php#War"/>
+                </owl:unionOf>
+            </owl:Class>
+        </rdfs:domain>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://awoiaf.westeros.org/index.php#destroyedIn -->
+
+    <owl:DatatypeProperty rdf:about="http://awoiaf.westeros.org/index.php#destroyedIn">
+        <rdfs:domain rdf:resource="http://awoiaf.westeros.org/index.php#City"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://awoiaf.westeros.org/index.php#diedIn -->
+
+    <owl:DatatypeProperty rdf:about="http://awoiaf.westeros.org/index.php#diedIn">
+        <rdfs:domain rdf:resource="http://awoiaf.westeros.org/index.php#Character"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://awoiaf.westeros.org/index.php#diedOut -->
+
+    <owl:DatatypeProperty rdf:about="http://awoiaf.westeros.org/index.php#diedOut">
+        <rdfs:domain rdf:resource="http://awoiaf.westeros.org/index.php#House"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://awoiaf.westeros.org/index.php#followedBy -->
+
+    <owl:DatatypeProperty rdf:about="http://awoiaf.westeros.org/index.php#followedBy">
+        <rdfs:domain rdf:resource="http://awoiaf.westeros.org/index.php#Book"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://awoiaf.westeros.org/index.php#fromRegion -->
+
+    <owl:DatatypeProperty rdf:about="http://awoiaf.westeros.org/index.php#fromRegion">
+        <rdfs:domain rdf:resource="http://awoiaf.westeros.org/index.php#House"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://awoiaf.westeros.org/index.php#fullNamesIs -->
+
+    <owl:DatatypeProperty rdf:about="http://awoiaf.westeros.org/index.php#fullNamesIs">
+        <rdfs:domain rdf:resource="http://awoiaf.westeros.org/index.php#Character"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://awoiaf.westeros.org/index.php#hasAlias -->
+
+    <owl:DatatypeProperty rdf:about="http://awoiaf.westeros.org/index.php#hasAlias">
+        <rdfs:domain rdf:resource="http://awoiaf.westeros.org/index.php#Character"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://awoiaf.westeros.org/index.php#hasAncestralWeapon -->
+
+    <owl:DatatypeProperty rdf:about="http://awoiaf.westeros.org/index.php#hasAncestralWeapon">
+        <rdfs:domain rdf:resource="http://awoiaf.westeros.org/index.php#House"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://awoiaf.westeros.org/index.php#hasCoatOfArms -->
+
+    <owl:DatatypeProperty rdf:about="http://awoiaf.westeros.org/index.php#hasCoatOfArms">
+        <rdfs:domain rdf:resource="http://awoiaf.westeros.org/index.php#House"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://awoiaf.westeros.org/index.php#hasCulture -->
+
+    <owl:DatatypeProperty rdf:about="http://awoiaf.westeros.org/index.php#hasCulture">
+        <rdfs:domain rdf:resource="http://awoiaf.westeros.org/index.php#Character"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://awoiaf.westeros.org/index.php#hasGenre -->
+
+    <owl:DatatypeProperty rdf:about="http://awoiaf.westeros.org/index.php#hasGenre">
+        <rdfs:domain rdf:resource="http://awoiaf.westeros.org/index.php#Book"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://awoiaf.westeros.org/index.php#hasISBN -->
+
+    <owl:DatatypeProperty rdf:about="http://awoiaf.westeros.org/index.php#hasISBN">
+        <rdfs:domain rdf:resource="http://awoiaf.westeros.org/index.php#Book"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://awoiaf.westeros.org/index.php#hasRace -->
+
+    <owl:DatatypeProperty rdf:about="http://awoiaf.westeros.org/index.php#hasRace">
+        <rdfs:domain rdf:resource="http://awoiaf.westeros.org/index.php#Character"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://awoiaf.westeros.org/index.php#hasReligion -->
+
+    <owl:DatatypeProperty rdf:about="http://awoiaf.westeros.org/index.php#hasReligion">
+        <rdfs:domain rdf:resource="http://awoiaf.westeros.org/index.php#City"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://awoiaf.westeros.org/index.php#hasWords -->
+
+    <owl:DatatypeProperty rdf:about="http://awoiaf.westeros.org/index.php#hasWords">
+        <rdfs:domain rdf:resource="http://awoiaf.westeros.org/index.php#House"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://awoiaf.westeros.org/index.php#isGovernedBy -->
+
+    <owl:DatatypeProperty rdf:about="http://awoiaf.westeros.org/index.php#isGovernedBy">
+        <rdfs:domain rdf:resource="http://awoiaf.westeros.org/index.php#City"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://awoiaf.westeros.org/index.php#isNamedFor -->
+
+    <owl:DatatypeProperty rdf:about="http://awoiaf.westeros.org/index.php#isNamedFor">
+        <rdfs:domain rdf:resource="http://awoiaf.westeros.org/index.php#City"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://awoiaf.westeros.org/index.php#locationIs -->
+
+    <owl:DatatypeProperty rdf:about="http://awoiaf.westeros.org/index.php#locationIs">
+        <rdfs:domain rdf:resource="http://awoiaf.westeros.org/index.php#City"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://awoiaf.westeros.org/index.php#nameIs -->
+
+    <owl:DatatypeProperty rdf:about="http://awoiaf.westeros.org/index.php#nameIs">
+        <rdfs:domain>
+            <owl:Class>
+                <owl:unionOf rdf:parseType="Collection">
+                    <rdf:Description rdf:about="http://awoiaf.westeros.org/index.php#Battle"/>
+                    <rdf:Description rdf:about="http://awoiaf.westeros.org/index.php#Book"/>
+                    <rdf:Description rdf:about="http://awoiaf.westeros.org/index.php#Character"/>
+                    <rdf:Description rdf:about="http://awoiaf.westeros.org/index.php#City"/>
+                    <rdf:Description rdf:about="http://awoiaf.westeros.org/index.php#House"/>
+                    <rdf:Description rdf:about="http://awoiaf.westeros.org/index.php#War"/>
+                </owl:unionOf>
+            </owl:Class>
+        </rdfs:domain>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://awoiaf.westeros.org/index.php#notablePlaceIs -->
+
+    <owl:DatatypeProperty rdf:about="http://awoiaf.westeros.org/index.php#notablePlaceIs">
+        <rdfs:domain rdf:resource="http://awoiaf.westeros.org/index.php#City"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://awoiaf.westeros.org/index.php#organizations -->
+
+    <owl:DatatypeProperty rdf:about="http://awoiaf.westeros.org/index.php#organizations">
+        <rdfs:domain rdf:resource="http://awoiaf.westeros.org/index.php#City"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://awoiaf.westeros.org/index.php#otherTitles -->
+
+    <owl:DatatypeProperty rdf:about="http://awoiaf.westeros.org/index.php#otherTitles">
+        <rdfs:domain rdf:resource="http://awoiaf.westeros.org/index.php#Character"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://awoiaf.westeros.org/index.php#pages -->
+
+    <owl:DatatypeProperty rdf:about="http://awoiaf.westeros.org/index.php#pages">
+        <rdfs:domain rdf:resource="http://awoiaf.westeros.org/index.php#Book"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://awoiaf.westeros.org/index.php#place -->
+
+    <owl:DatatypeProperty rdf:about="http://awoiaf.westeros.org/index.php#place">
+        <rdfs:domain rdf:resource="http://awoiaf.westeros.org/index.php#Battle"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://awoiaf.westeros.org/index.php#playedBy -->
+
+    <owl:DatatypeProperty rdf:about="http://awoiaf.westeros.org/index.php#playedBy">
+        <rdf:type rdf:resource="&owl;FunctionalProperty"/>
+        <rdfs:label>playedBy</rdfs:label>
+        <dc:title>playedBy</dc:title>
+        <rdfs:domain rdf:resource="http://awoiaf.westeros.org/index.php#Character"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://awoiaf.westeros.org/index.php#publisherIs -->
+
+    <owl:DatatypeProperty rdf:about="http://awoiaf.westeros.org/index.php#publisherIs">
+        <rdfs:domain rdf:resource="http://awoiaf.westeros.org/index.php#Book"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://awoiaf.westeros.org/index.php#reigned -->
+
+    <owl:DatatypeProperty rdf:about="http://awoiaf.westeros.org/index.php#reigned">
+        <rdfs:domain rdf:resource="http://awoiaf.westeros.org/index.php#Character"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://awoiaf.westeros.org/index.php#resultWas -->
+
+    <owl:DatatypeProperty rdf:about="http://awoiaf.westeros.org/index.php#resultWas">
+        <rdfs:domain>
+            <owl:Class>
+                <owl:unionOf rdf:parseType="Collection">
+                    <rdf:Description rdf:about="http://awoiaf.westeros.org/index.php#Battle"/>
+                    <rdf:Description rdf:about="http://awoiaf.westeros.org/index.php#War"/>
+                </owl:unionOf>
+            </owl:Class>
+        </rdfs:domain>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://awoiaf.westeros.org/index.php#titleIs -->
+
+    <owl:DatatypeProperty rdf:about="http://awoiaf.westeros.org/index.php#titleIs">
+        <rdfs:domain rdf:resource="http://awoiaf.westeros.org/index.php#Character"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://awoiaf.westeros.org/index.php#wasFounded -->
+
+    <owl:DatatypeProperty rdf:about="http://awoiaf.westeros.org/index.php#wasFounded">
+        <rdfs:domain>
+            <owl:Class>
+                <owl:unionOf rdf:parseType="Collection">
+                    <rdf:Description rdf:about="http://awoiaf.westeros.org/index.php#City"/>
+                    <rdf:Description rdf:about="http://awoiaf.westeros.org/index.php#House"/>
+                </owl:unionOf>
+            </owl:Class>
+        </rdfs:domain>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://awoiaf.westeros.org/index.php#wasReleased -->
+
+    <owl:DatatypeProperty rdf:about="http://awoiaf.westeros.org/index.php#wasReleased">
+        <rdfs:domain rdf:resource="http://awoiaf.westeros.org/index.php#Book"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Classes
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://awoiaf.westeros.org/index.php#Battle -->
+
+    <owl:Class rdf:about="http://awoiaf.westeros.org/index.php#Battle"/>
+    
+
+
+    <!-- http://awoiaf.westeros.org/index.php#Book -->
+
+    <owl:Class rdf:about="http://awoiaf.westeros.org/index.php#Book"/>
+    
+
+
+    <!-- http://awoiaf.westeros.org/index.php#Character -->
+
+    <owl:Class rdf:about="http://awoiaf.westeros.org/index.php#Character"/>
+    
+
+
+    <!-- http://awoiaf.westeros.org/index.php#City -->
+
+    <owl:Class rdf:about="http://awoiaf.westeros.org/index.php#City"/>
+    
+
+
+    <!-- http://awoiaf.westeros.org/index.php#House -->
+
+    <owl:Class rdf:about="http://awoiaf.westeros.org/index.php#House"/>
+    
+
+
+    <!-- http://awoiaf.westeros.org/index.php#War -->
+
+    <owl:Class rdf:about="http://awoiaf.westeros.org/index.php#War"/>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Individuals
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+   
+<!-- SUBSTITUIR -->
+
+
+</rdf:RDF>
+
+
+
+<!-- Generated by the OWL API (version 3.5.0) http://owlapi.sourceforge.net -->
+

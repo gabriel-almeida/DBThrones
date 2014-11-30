@@ -65,20 +65,20 @@ conversao = {
 	"words":"hasWords"
 }
 
-dataType={"BATTLE":["dateIs","nameIs", "place", "resultWas"],
-	"BOOK":["authorIs","followedBy","hasGenre","hasISBN","nameIs", "pages","publisherIs","wasReleased"],
-	"CHARACTER":["appearsInSeason","bornIn","diedIn","fullNameIs","hasAlias","hasCulture","hasRace","nameIs","otherTitles","playedBy","reigned","titlesIs"],
-	"CITY":["destroyedIn","locationIs","hasReligion","isGovernedBy","isNamedFor","nameIs","notablePlaceIs","organizations","wasFounded"],
-	"HOUSE":["diedOut","fromRegion","hasAncestralWeapon","hasCoatOfArms","hasWords","nameIs","wasFounded","titlesIs"],
-	"WAR":["dateIs","nameIs", "resultWas"]
+dataType={"Battle":["dateIs","nameIs", "place", "resultWas"],
+	"Book":["authorIs","followedBy","hasGenre","hasISBN","nameIs", "pages","publisherIs","wasReleased"],
+	"Character":["appearsInSeason","bornIn","diedIn","fullNameIs","hasAlias","hasCulture","hasRace","nameIs","otherTitles","playedBy","reigned","titlesIs"],
+	"City":["destroyedIn","locationIs","hasReligion","isGovernedBy","isNamedFor","nameIs","notablePlaceIs","organizations","wasFounded"],
+	"House":["diedOut","fromRegion","hasAncestralWeapon","hasCoatOfArms","hasWords","nameIs","wasFounded","titlesIs"],
+	"War":["dateIs","nameIs", "resultWas"]
 }
 
-ObjectProperties = {"BATTLE": [("conflictHappenedIn","WAR")],
-	"BOOK":[("precededBy","BOOK")],
-	"CITY":[],
-	"CHARACTER":[("appearsIn","BOOK"),("belongsToRoyalHouse","HOUSE"),("father","CHARACTER"),("hasAllegianceWith","HOUSE"),("hasIssue","CHARACTER"),("heirIs","CHARACTER"),("motherIs","CHARACTER"),("queenIs","CHARACTER"),("spouse","CHARACTER"),("sucessorIs","CHARACTER")],
-	"HOUSE":[("currentLordIs","CHARACTER"),("hasCadetBranch","HOUSE"),("heirIs","CHARACTER"),("overlordIs","HOUSE"),("seatIs","CITY"),("wasFoundedBy","CHARACTER")],
-	"WAR":[("hasBattle","BATTLE")]
+ObjectProperties = {"Battle": [("conflictHappenedIn","War")],
+	"Book":[("precededBy","Book")],
+	"City":[],
+	"Character":[("appearsIn","Book"),("belongsToRoyalHouse","House"),("father","Character"),("hasAllegianceWith","House"),("hasIssue","Character"),("heirIs","Character"),("motherIs","Character"),("queenIs","Character"),("spouse","Character"),("sucessorIs","Character")],
+	"House":[("currentLordIs","Character"),("hasCadetBranch","House"),("heirIs","Character"),("overlordIs","House"),("seatIs","City"),("wasFoundedBy","Character")],
+	"War":[("hasBattle","Battle")]
 }
 
 def forcaIntegridade(triplas, classes):
@@ -121,15 +121,24 @@ def infereTipo(triplas):
 	#print([sujeito + '->' + str(sujeitos[s].most_common(1)) for s in sujeitos].sort())
 	return sujeitos
 
+import re
+def limpaUrl(url):
+	return re.sub(r'[^A-Za-z\/_.]', '', url).lower()
+
 def importaTriplas(arqName):
 	linhas = open(arqName, 'r').read().split('\n')[1:-1]
 	triplas = {}
 	for l in linhas:
 		elementos = l.split(';')
 		sujeito, predicado, objeto = elementos[0].strip('"'), elementos[1].strip('"'), elementos[2].strip('"')
+
+		sujeito = limpaUrl(sujeito)
+		if objeto.startswith('/index.php/'):
+			objeto = limpaUrl(objeto)
+
 		if (sujeito not in triplas):
 			triplas[sujeito] = []
-		triplas[sujeito] += [(predicado, objeto)]
+		triplas[sujeito] += [(predicado, objeto.replace('&','') )]
 	return triplas
 
 def removeLinksExtras(triplas):
@@ -151,18 +160,6 @@ def listaNomes(triplas):
 			if predicado == 'nameIs':
 				lista[objeto] = sujeito
 	return lista
-
-def removeTriplasRedundantes(triplas):
-	lista = listaNomes(triplas)
-	for sujeito in triplas:
-		elementos = triplas[sujeito]
-		for i in range(len(elementos)):
-			(predicado, objeto) = elementos[i]
-			#unica diferenca do anterior eh a condicao. TODO Generalizar
-			if objeto in lista and (predicado, lista[objeto]) in elementos:
-				elementos[i] = None
-		triplas[sujeito] = [t for t in elementos if t is not None]
-	return triplas
 
 def localizaRelacoes(triplas):
 	lista = listaNomes(triplas)
@@ -203,13 +200,38 @@ def salvaResultado(triplas, classe, arqSaida):
 	l.sort()
 	[f.write(i) for i in l ]
 
+def geraOWL(triplas, classes):
+	templateInicio = '''\t<!-- http://awoiaf.westeros.org/index.php#%s -->
+	<owl:NamedIndividual rdf:about="http://awoiaf.westeros.org/index.php#%s">
+		<rdf:type rdf:resource="http://awoiaf.westeros.org/index.php#%s"/>\n\n'''
+	templateDataType = '''\t\t<%s>%s</%s>\n'''
+	templateObjetProperty = '''\t\t<%s rdf:resource="http://awoiaf.westeros.org/index.php#%s" />\n'''
+	templateFim = '''\t</owl:NamedIndividual>\n\n'''
 
-def pipelinePosProcessamento(arqEntrada='triplas27112014_004031.csv'):
-	#, arqSaida):
-	#arq = open(arqSaida, 'w')
+	resultado = ""
+	
+	sujeitos = list(triplas.keys())
+	sujeitos.sort()
+
+	for sujeito in sujeitos:
+		url = sujeito.replace('/index.php/', '')
+		classeSujeito = classes[sujeito]
+
+		resultado += templateInicio % (url, url, classeSujeito)
+
+		for predicado, objeto in triplas[sujeito]:
+			if predicado in dataType[classeSujeito]:
+				resultado += templateDataType % (predicado, objeto, predicado)
+			else:
+				resultado += templateObjetProperty % (predicado, objeto.replace('/index.php/', '') )
+
+		resultado += templateFim
+	return resultado
+
+
+def pipelinePosProcessamento(arqEntrada='triplas27112014_004031.csv', arqSaida='populacao30112014.owl', ontologiaBase='ontologiaBase.owl'):
 	triplas = importaTriplas(arqEntrada)
 	triplas = substituicaoBasica(triplas)
-	#triplas = removeTriplasRedundantes(triplas)
 	triplas = removeLinksExtras(triplas)
 	triplas = localizaRelacoes(triplas)
 	inferencia = infereTipo(triplas)
@@ -218,7 +240,16 @@ def pipelinePosProcessamento(arqEntrada='triplas27112014_004031.csv'):
 	triplas = forcaIntegridade(triplas, classes)
 
 	salvaResultado(triplas, classes, 'triplas_posprocessamento_30112014.csv')
-	return triplas, listaNomes(triplas), inferencia,  classes
+
+	base = open(ontologiaBase, 'r').read()
+	f = open(arqSaida, 'w')
+
+	resultado = base.replace( '''<!-- SUBSTITUIR -->''' ,geraOWL(triplas, classes))
+	
+	f.write(resultado)
+	f.close()
+
+	return triplas, listaNomes(triplas), inferencia,  classes, resultado
 
 pipelinePosProcessamento()
 #substituicaoBasica('triplas27112014_004031.csv', 'triplas27112014_004031_convertido.csv')
