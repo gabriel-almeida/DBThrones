@@ -1,5 +1,5 @@
 from collections import Counter
-predicadosRemovidos = {"# of episodes","notable work(s)", "buried in","coronation","country","cover artist","destroyed","disbanded","genres","dvd release date","influences","language","nationality","population","notable works","occupation","original run","series","size","media type","motto/war cry","result"}
+predicadosRemovidos = {"# of episodes","notable work(s)", "buried in","coronation","country","cover artist","genres","dvd release date","influences","language","nationality","notable works","occupation","original run","series","size","media type"}
 conversao = {
 	"alias":"hasAlias",
 	"allegiance":"hasAllegianceWith",
@@ -17,6 +17,8 @@ conversao = {
 	"conflict":"conflictHappenedIn",
 	"current commander" : "currentLordIs",
 	"current lord" : "currentLordIs",
+	"destroyed" : "destroyedIn",#
+	"disbanded" : "diedOut",#
 	"date":"dateIs",
 	"died in" : "diedIn",
 	"died" : "diedIn",
@@ -33,6 +35,7 @@ conversao = {
 	"issue":"hasIssue",
 	"location":"locationIs",
 	"mother":"motherIs",
+	"motto/war cry":"hasWords",#
 	"name":"nameIs",
 	"named for":"isNamedFor",
 	"notable places":"notablePlaceIs",#
@@ -51,6 +54,7 @@ conversao = {
 	"reign":"reigned",
 	"released":"wasReleased",
 	"religion":"hasReligion",
+	"result": "resultWas",#
 	"royal house":"belongsToRoyalHouse",
 	"seat":"seatIs",
 	"spouse" : "spouse",
@@ -61,21 +65,36 @@ conversao = {
 	"words":"hasWords"
 }
 
-dataType={"BATTLE":["dateIs","nameIs"],
+dataType={"BATTLE":["dateIs","nameIs", "resultWas"],
 	"BOOK":["authorIs","followedBy","hasGenre","hasISBN","nameIs", "pages","publisherIs","wasReleased"],
-	"CHARACTER":["appearsInSeason","bornIn","diedIn","fullNameIs","hasAlias","hasCulture","hasRace","nameIs","otherTitles","reigned","titlesIs"],
-	"CITY":["hasReligion","isGovernedBy","isNamedFor","nameIs","notablePlaceIs","organizations","wasFounded"],
+	"CHARACTER":["appearsInSeason","bornIn","diedIn","fullNameIs","hasAlias","hasCulture","hasRace","nameIs","otherTitles","playedBy","reigned","titlesIs"],
+	"CITY":["destroyedIn","hasReligion","isGovernedBy","isNamedFor","nameIs","notablePlaceIs","organizations","wasFounded"],
 	"HOUSE":["diedOut","hasAncestralWeapon","hasCoatOfArms","hasWords","nameIs","wasFounded","titlesIs"],
 	"WAR":["nameIs"]
 }
 
 ObjectProperties = {"BATTLE": [("conflictHappenedIn","WAR"),("place","CITY"),("place","REGION")],
 	"BOOK":[("precededBy","BOOK")],
-	"CHARACTER":[("appearsIn","BOOKS"),("belongsToRoyalHouse","HOUSE"),("father","CHARACTER"),("hasAllegianceWith","HOUSE"),("hasIssue","CHARACTER"),("heirIs","CHARACTER"),("motherIs","CHARACTER"),("playedBy","NAME"),("queenIs","CHARACTER"),("spouse","CHARACTER"),("sucessorIs","CHARACTER")],
+	"CHARACTER":[("appearsIn","BOOK"),("belongsToRoyalHouse","HOUSE"),("father","CHARACTER"),("hasAllegianceWith","HOUSE"),("hasIssue","CHARACTER"),("heirIs","CHARACTER"),("motherIs","CHARACTER"),("queenIs","CHARACTER"),("spouse","CHARACTER"),("sucessorIs","CHARACTER")],
 	"CITY":[("locationIs","REGION")],
 	"HOUSE":[("currentLordIs","CHARACTER"),("fromRegion","REGION"),("hasCadetBranch","HOUSE"),("heirIs","CHARACTER"),("overlordIs","HOUSE"),("seatIs","CITY"),("wasFoundedBy","CHARACTER")],
 	"WAR":[("hasBattle","BATTLE")]
 }
+
+def forcaIntegridade(triplas, classes):
+	for sujeito in triplas:
+		triplasFinais = []
+		classeSujeito = classes[sujeito]
+		for predicado, objeto in triplas[sujeito]:
+			if predicado in dataType[classeSujeito] and not objeto.startswith('/index.php/'):
+				triplasFinais += [(predicado, objeto)]
+
+			for predicadoEsperado, objetoEsperado in ObjectProperties[classeSujeito]:
+				if predicado == predicadoEsperado and objeto.startswith('/index.php/') and classes[objeto] == objetoEsperado:
+					triplasFinais += [(predicado, objeto)]
+
+		triplas[sujeito] = triplasFinais
+	return triplas
 
 def infereTipo(triplas):
 	sujeitos = {}
@@ -88,7 +107,12 @@ def infereTipo(triplas):
 				for (predicadoEsperado, objetoEsperado) in ObjectProperties[classe]:
 					if predicado == predicadoEsperado:
 						sujeitos[sujeito].update([classe])
-					
+
+						if objeto.startswith('/index.php/'):
+							if objeto not in sujeitos:
+								sujeitos[objeto] = Counter()
+							sujeitos[objeto].update([objetoEsperado])
+						
 			# tenta parear com DataType
 			for classe in dataType:
 				for predicadoEsperado in dataType[classe]:
@@ -154,8 +178,7 @@ def localizaRelacoes(triplas):
 def substituicaoBasica(triplas):
 	for sujeito in triplas:
 		elementos = triplas[sujeito]
-		if len(elementos) == 1:
-			print(sujeito)
+		elementosAdicionais = []
 		for i in range(len(elementos)):
 			(predicado, objeto) = elementos[i]
 			predicado = predicado.lower()
@@ -164,7 +187,10 @@ def substituicaoBasica(triplas):
 				elementos[i] = None
 			if predicado in conversao:
 				elementos[i] = (conversao[predicado], objeto)
-		triplas[sujeito] = [t for t in elementos if t is not None]
+			if '|' in objeto:
+				elementosAdicionais += [ (predicado,  s.strip()) for s in objeto.split('|') ]
+				elementos[i] = None
+		triplas[sujeito] = [t for t in elementos if t is not None] + elementosAdicionais
 	return triplas
 
 def salvaResultado(triplas, classe, arqSaida):
@@ -178,18 +204,19 @@ def salvaResultado(triplas, classe, arqSaida):
 	[f.write(i) for i in l ]
 
 
-def pipelinePosProcessamento(arqEntrada='triplas27112014_004031_convertido.csv'):
+def pipelinePosProcessamento(arqEntrada='triplas27112014_004031.csv'):
 	#, arqSaida):
 	#arq = open(arqSaida, 'w')
 	triplas = importaTriplas(arqEntrada)
 	triplas = substituicaoBasica(triplas)
-	triplas = removeTriplasRedundantes(triplas)
-	triplas = removeLinksExtras(triplas)
+	#triplas = removeTriplasRedundantes(triplas)
+	#triplas = removeLinksExtras(triplas)
 	triplas = localizaRelacoes(triplas)
 	inferencia = infereTipo(triplas)
 
 	classes = { sujeito : inferencia[sujeito].most_common(1)[0][0] for sujeito in inferencia }
-	#[print(s) for s in [ sujeito + '->' + classes[sujeito] for sujeito in classes ].sort()]
+	triplas = forcaIntegridade(triplas, classes)
+
 	salvaResultado(triplas, classes, 'triplas_posprocessamento_30112014.csv')
 	return triplas, listaNomes(triplas), inferencia,  classes
 
